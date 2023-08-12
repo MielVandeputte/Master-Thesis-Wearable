@@ -1,4 +1,4 @@
-package com.masterproef.model
+package com.masterproef.shared
 
 import java.util.*
 

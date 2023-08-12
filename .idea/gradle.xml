@@ -11,9 +11,9 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/model" />
-            <option value="$PROJECT_DIR$/phoneapp" />
-            <option value="$PROJECT_DIR$/watchapp" />
+            <option value="$PROJECT_DIR$/phoneUI" />
+            <option value="$PROJECT_DIR$/shared" />
+            <option value="$PROJECT_DIR$/watchUI" />
           </set>
         </option>
       </GradleProjectSettings>

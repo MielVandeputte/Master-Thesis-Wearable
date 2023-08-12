@@ -1,4 +1,4 @@
-package com.masterproef.model
+package com.masterproef.shared
 
 import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattCharacteristic.PROPERTY_INDICATE

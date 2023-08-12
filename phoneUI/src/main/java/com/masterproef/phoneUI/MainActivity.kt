@@ -1,4 +1,4 @@
-package com.masterproef.watchapp
+package com.masterproef.phoneUI
 
 import android.Manifest
 import android.app.Activity
@@ -14,6 +14,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.wear.compose.material.*
-import com.masterproef.model.BluetoothForegroundService
+import com.masterproef.shared.BluetoothForegroundService
 
 class MainActivity : ComponentActivity() {
 
@@ -35,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { WearApp(activity = this) }
+        setContent { PhoneApp(activity = this) }
 
         startServiceIntent =  Intent(this, BluetoothForegroundService::class.java)
     }
@@ -77,7 +80,6 @@ class MainActivity : ComponentActivity() {
         val permissionChecks = mutableListOf(
             ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN),
             ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK),
-            ContextCompat.checkSelfPermission(this, Manifest.permission.BODY_SENSORS),
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
         )
 
@@ -99,7 +101,6 @@ class MainActivity : ComponentActivity() {
         val permissions = mutableListOf(
             Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.WAKE_LOCK,
-            Manifest.permission.BODY_SENSORS,
             Manifest.permission.RECORD_AUDIO
         )
 
@@ -121,27 +122,28 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun WearApp(activity: MainActivity) {
+fun PhoneApp(activity: MainActivity) {
     var deviceId by remember { mutableStateOf(1) }
 
-    Column(modifier = Modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Surface(color = Color.White, modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 
-        Text(text = "Masterproef Watch App", style = TextStyle(fontWeight = FontWeight.Bold))
+            Text(text = "user id:  $deviceId", softWrap = false, style = TextStyle(fontWeight = FontWeight.Bold))
 
-        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
-            Button(onClick = { if (deviceId > 1) { deviceId-- } }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray)) {
-                Text(text = "-", style = TextStyle(fontWeight = FontWeight.Bold))
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)) {
+
+                Button(onClick = { if (deviceId > 1) { deviceId-- } }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray), modifier = Modifier.padding(horizontal = 8.dp)) {
+                    Text(text = "-", style = TextStyle(fontWeight = FontWeight.Bold))
+                }
+
+                Button(onClick = { deviceId++ }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray), modifier = Modifier.padding(horizontal = 8.dp)) {
+                    Text(text = "+", style = TextStyle(fontWeight = FontWeight.Bold))
+                }
             }
 
-            Text(text = "$deviceId", softWrap = false)
-
-            Button(onClick = { deviceId++ }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray)) {
-                Text(text = "+", style = TextStyle(fontWeight = FontWeight.Bold))
+            Button(onClick = { activity.startAdvertising(deviceId) }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)) {
+                Text(text = "Start / Apply", style = TextStyle(fontWeight = FontWeight.Bold, textAlign = TextAlign.Center, color = Color.White))
             }
-        }
-
-        Button(onClick = { activity.startAdvertising(deviceId) }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.DarkGray)){
-            Text(text = "Start / Apply", style = TextStyle(fontWeight = FontWeight.Bold, textAlign = TextAlign.Center), modifier = Modifier.fillMaxWidth())
         }
     }
 }

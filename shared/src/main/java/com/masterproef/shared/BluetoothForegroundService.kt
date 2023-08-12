@@ -1,4 +1,4 @@
-package com.masterproef.model
+package com.masterproef.shared
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

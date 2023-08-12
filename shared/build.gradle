@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.masterproef.model'
+    namespace 'com.masterproef.shared'
     compileSdk 33
 
     defaultConfig {

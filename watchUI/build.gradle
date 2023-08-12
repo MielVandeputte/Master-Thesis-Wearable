@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.masterproef.watchapp'
+    namespace 'com.masterproef.watchUI'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.masterproef.watchapp"
+        applicationId "com.masterproef.watchUI"
         minSdk 26
         targetSdk 33
         versionCode 1
@@ -60,7 +60,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.7.1'
     implementation 'androidx.compose.runtime:runtime-livedata:1.5.0-alpha03'
     implementation 'com.github.weliem:blessed-android:2.4.2'
-    implementation project(':model')
+    implementation project(':shared')
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"

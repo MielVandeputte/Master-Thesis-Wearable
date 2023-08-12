@@ -1,10 +1,9 @@
-package com.masterproef.model
+package com.masterproef.shared
 
 import android.annotation.SuppressLint
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import android.util.Log
 import org.jtransforms.fft.DoubleFFT_1D
 import java.util.LinkedList
 import kotlin.math.sqrt

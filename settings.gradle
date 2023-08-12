@@ -13,7 +13,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "Master Thesis Advertiser"
-include ':watchapp'
-include ':model'
-include ':phoneapp'
+rootProject.name = "Masterproef-Wearable"
+include ':watchUI'
+include ':shared'
+include ':phoneUI'
