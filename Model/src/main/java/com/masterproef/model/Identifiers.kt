@@ -1,0 +1,16 @@
+package com.masterproef.model
+
+import java.util.*
+
+object Identifiers {
+
+    val CUD_DESCRIPTOR_UUID: UUID = UUID.fromString("00002901-0000-1000-8000-00805f9b34fb")
+    val CCC_DESCRIPTOR_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
+
+    val IDENTIFICATION_SERVICE_UUID: UUID = UUID.fromString("07b2ac95-f87c-4fb8-a500-5674097e643d")
+    val DEVICE_ID_CHARACTERISTIC_UUID: UUID = UUID.fromString("f0222ef2-c76f-40dd-ac81-f05489956eb9")
+    val ULTRASONIC_DETECTED_CHARACTERISTIC_UUID: UUID = UUID.fromString("3676e3c9-26b0-4a90-8a20-ae351ef431a2")
+
+    val HRV_SERVICE_UUID: UUID = UUID.fromString("f21f5538-0802-4b05-a3f7-b4566f4dbd90")
+    val PP_INTERVAL_CHARACTERISTIC_UUID: UUID = UUID.fromString("9bc93895-7875-4c2d-8402-505f9d8c1ee7")
+}
