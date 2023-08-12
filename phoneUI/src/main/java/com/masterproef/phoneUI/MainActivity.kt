@@ -128,7 +128,7 @@ fun PhoneApp(activity: MainActivity) {
     Surface(color = Color.White, modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 
-            Text(text = "user id:  $deviceId", softWrap = false, style = TextStyle(fontWeight = FontWeight.Bold))
+            Text(text = "device id:  $deviceId", softWrap = false, style = TextStyle(fontWeight = FontWeight.Bold))
 
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(8.dp)) {
 

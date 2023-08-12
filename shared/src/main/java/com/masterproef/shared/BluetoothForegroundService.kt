@@ -46,7 +46,7 @@ class BluetoothForegroundService : android.app.Service() {
         notificationService.createNotificationChannel(notificationChannel)
 
         val notification = NotificationCompat.Builder(this, BluetoothForegroundService::class.java.simpleName)
-                .setContentTitle("Masterproef Watch App")
+                .setContentTitle("Masterproef Wearable")
                 .setContentText("Service is running in the background")
                 .setSmallIcon(android.R.drawable.ic_dialog_info).setAutoCancel(true).build()
 
@@ -110,10 +110,8 @@ class BluetoothForegroundService : android.app.Service() {
                 .setConnectable(true).setTimeout(0)
                 .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM).build()
 
-        val advertiseData = AdvertiseData.Builder().setIncludeTxPowerLevel(true)
-            .addServiceUuid(ParcelUuid(Identifiers.IDENTIFICATION_SERVICE_UUID)).build()
-
-        val scanResponse = AdvertiseData.Builder().setIncludeDeviceName(true).build()
+        val advertiseData = AdvertiseData.Builder().addServiceUuid(ParcelUuid(Identifiers.IDENTIFICATION_SERVICE_UUID)).build()
+        val scanResponse = AdvertiseData.Builder().setIncludeDeviceName(true).setIncludeTxPowerLevel(true).build()
 
         peripheralManager.startAdvertising(advertiseSettings, advertiseData, scanResponse)
     }

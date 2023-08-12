@@ -126,7 +126,7 @@ fun WearApp(activity: MainActivity) {
 
     Column(modifier = Modifier.padding(4.dp), horizontalAlignment = Alignment.CenterHorizontally) {
 
-        Text(text = "Masterproef Watch App", style = TextStyle(fontWeight = FontWeight.Bold))
+        Text(text = "Masterproef Wearable", style = TextStyle(fontWeight = FontWeight.Bold))
 
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
             Button(onClick = { if (deviceId > 1) { deviceId-- } }, colors = ButtonDefaults.buttonColors(backgroundColor = Color.LightGray)) {
