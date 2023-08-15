@@ -7,6 +7,7 @@ import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
 import android.os.*
 import androidx.core.app.NotificationCompat
 import com.welie.blessed.*
@@ -52,7 +53,9 @@ class BluetoothForegroundService : android.app.Service() {
 
         // Start foregroundservice on the permanent notification
         // The hardcoded id ensures that only 1 instance of this service can exist at one time
+
         startForeground(4929, notification)
+
 
         bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         peripheralManager = BluetoothPeripheralManager(this, bluetoothManager, PeripheralManagerCallback(servicesByUUID))

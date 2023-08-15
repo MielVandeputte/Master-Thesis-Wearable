@@ -78,7 +78,6 @@ class MainActivity : ComponentActivity() {
 
     private fun checkPermissions(): Boolean {
         val permissionChecks = mutableListOf(
-            ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN),
             ContextCompat.checkSelfPermission(this, Manifest.permission.WAKE_LOCK),
             ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
         )
@@ -88,6 +87,10 @@ class MainActivity : ComponentActivity() {
             permissionChecks.add(ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT))
             permissionChecks.add(ContextCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE))
             permissionChecks.add(ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADVERTISE))
+
+        // Only check these permissions for older versions of Android
+        } else {
+            permissionChecks.add(ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN))
         }
 
         for (el in permissionChecks) {
@@ -99,7 +102,6 @@ class MainActivity : ComponentActivity() {
 
     private fun askPermissions() {
         val permissions = mutableListOf(
-            Manifest.permission.BLUETOOTH_ADMIN,
             Manifest.permission.WAKE_LOCK,
             Manifest.permission.RECORD_AUDIO
         )
@@ -109,6 +111,10 @@ class MainActivity : ComponentActivity() {
             permissions.add(Manifest.permission.FOREGROUND_SERVICE)
             permissions.add(Manifest.permission.BLUETOOTH_ADVERTISE)
             permissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+
+        // Only ask for these permissions in older versions of Android
+        } else {
+            permissions.add(Manifest.permission.BLUETOOTH_ADMIN)
         }
 
         ActivityCompat.requestPermissions(this, permissions.toTypedArray(), 0)
