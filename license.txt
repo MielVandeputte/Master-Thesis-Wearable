@@ -1,0 +1,6 @@
+The following open-source libraries are used in this project and are licensed under the MIT License:
+
+- BLESSED, a Bluetooth Low Energy (BLE) library for Android
+  - Copyright (c) 2019 Martijn van Welie
+  - License: MIT License
+  - Source: https://github.com/weliem/blessed-android
