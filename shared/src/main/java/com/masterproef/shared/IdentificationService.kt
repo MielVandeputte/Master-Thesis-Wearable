@@ -10,6 +10,10 @@ import com.welie.blessed.BluetoothCentral
 import com.welie.blessed.BluetoothPeripheralManager
 import com.welie.blessed.GattStatus
 import com.welie.blessed.ReadResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.nio.ByteBuffer
 
 /*
@@ -17,7 +21,7 @@ import java.nio.ByteBuffer
  *  Holds the Gatt-service objects that represent the Gatt-service in the Android BLE API
  *  Defines the behaviour of the Gatt-service
  * */
-class IdentificationService(peripheralManager: BluetoothPeripheralManager) : BaseService(peripheralManager) {
+class IdentificationService(peripheralManager: BluetoothPeripheralManager, private val serviceScope: CoroutineScope) : BaseService(peripheralManager) {
 
     // Objects represent the service and the characteristics within the Android Bluetooth Low Energy API
     // deviceID can be read, ultrasonicDetected can be subscribed to
@@ -27,6 +31,10 @@ class IdentificationService(peripheralManager: BluetoothPeripheralManager) : Bas
 
     // Contains the current value of deviceId, saved as type ByteArray so it's ready to be sent
     private lateinit var deviceId: ByteArray
+
+    // An Ultrasonicdetection-job gets created every time a device connects, to listen for the ultrasonic pattern
+    // These job-objects are kept in this dictionary by device-address
+    private val jobs = mutableMapOf<String, Job>()
 
     init {
         setDeviceId(-1)
@@ -49,27 +57,31 @@ class IdentificationService(peripheralManager: BluetoothPeripheralManager) : Bas
     /*
     *   Gets called by the distributor, PeripheralManagerCallback, when a device connects
     *
-    *   The mic is activated to start listening for the pattern
-    *   Connected device gets notified if the pattern was detected or not
+    *   A new coroutine is started and added to the list of jobs, this makes sure that the main thread and UI isn't affected
+    *   A new ultrasonicdetector-object is created and this object activates the mic to start listening for the pattern
+    *
+    *   All connected devices get notified if the pattern was detected or not
     *   once that pattern gets detected or once the timer runs out
     * */
     override fun onCentralConnected(central: BluetoothCentral) {
-        //val detected = UltrasonicDetector.startAnalyzingAudio()
+        jobs[central.address] = serviceScope.launch(Dispatchers.Default) {
+            val detected = UltrasonicDetector().analyzeAudio()
 
-        //val byteBuffer = ByteBuffer.allocate(1).put(if (detected) 1.toByte() else 0.toByte())
-        //val detectedByteArray = byteBuffer.array()
+            val byteBuffer = ByteBuffer.allocate(1).put(if (detected) 1.toByte() else 0.toByte())
+            val detectedByteArray = byteBuffer.array()
 
-        //notifyCharacteristicChanged(detectedByteArray, ultrasonicDetectedCharacteristic)
+            notifyCharacteristicChanged(detectedByteArray, ultrasonicDetectedCharacteristic)
+        }
     }
 
     /*
     *   Gets called by the distributor, PeripheralManagerCallback, when a device disconnects
-    *   Stops listening for the pattern prematurely if no devices are connected
+    *   The coroutine of that connected device is retrieved from the list of jobs and gets cancelled
+    *   This makes sure that that coroutine stops listening and searching for the pattern
     * */
     override fun onCentralDisconnected(central: BluetoothCentral) {
-        if (noCentralsConnectedExcept(central)) {
-            UltrasonicDetector.stopAnalyzingAudio()
-        }
+        jobs[central.address]?.cancel()
+        jobs.remove(central.address)
     }
 
     // Converts and saves deviceId as a bytearray so it's ready to be sent

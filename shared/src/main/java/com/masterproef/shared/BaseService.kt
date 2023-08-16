@@ -32,16 +32,6 @@ abstract class BaseService(private val peripheralManager: BluetoothPeripheralMan
         peripheralManager.notifyCharacteristicChanged(value, characteristic)
     }
 
-    // Checks if any devices are still connected
-    // OnCentralDisconnected gets called before the device is actually disconnected
-    // so this device needs to be neglected if the function is called from OnCentralDisconnected
-    fun noCentralsConnectedExcept(central: BluetoothCentral): Boolean {
-        for (per in peripheralManager.connectedCentrals) {
-            if (per.address != central.address) { return false }
-        }
-        return true
-    }
-
     // Checks if any devices in central mode are subscribed to a characteristic
     fun noCentralsWantingNotifications(characteristic: BluetoothGattCharacteristic): Boolean {
         return peripheralManager.getCentralsWantingNotifications(characteristic).size == 0

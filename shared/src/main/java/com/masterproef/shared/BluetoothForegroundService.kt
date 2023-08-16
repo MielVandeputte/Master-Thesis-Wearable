@@ -11,6 +11,9 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE
 import android.os.*
 import androidx.core.app.NotificationCompat
 import com.welie.blessed.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import java.util.UUID
 
 /*
@@ -19,6 +22,10 @@ import java.util.UUID
 *   Only one object of this class can exist at the same time
 * */
 class BluetoothForegroundService : android.app.Service() {
+
+    // This coroutinescope makes sure that coroutines can be created and that those coroutines will be stopped
+    // once the foregroundservice is stopped
+    private val serviceScope = CoroutineScope(Dispatchers.IO)
 
     private lateinit var bluetoothManager: BluetoothManager
     private lateinit var peripheralManager: BluetoothPeripheralManager
@@ -51,10 +58,15 @@ class BluetoothForegroundService : android.app.Service() {
                 .setContentText("Service is running in the background")
                 .setSmallIcon(android.R.drawable.ic_dialog_info).setAutoCancel(true).build()
 
-        // Start foregroundservice on the permanent notification
-        // The hardcoded id ensures that only 1 instance of this service can exist at one time
-
-        startForeground(4929, notification)
+        /* Start foregroundservice on the permanent notification
+         * The hardcoded id ensures that only 1 instance of this service can exist at one time
+         * FOREGROUND_SERVICE_TYPE_MICROPHONE makes sure that the foregroundservice can access the microphone from the background
+         * */
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            startForeground(4929, notification, FOREGROUND_SERVICE_TYPE_MICROPHONE)
+        } else {
+            startForeground(4929, notification)
+        }
 
 
         bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -62,7 +74,7 @@ class BluetoothForegroundService : android.app.Service() {
         peripheralManager.removeAllServices()
 
         // Create identification-service object
-        val identificationService = IdentificationService(peripheralManager)
+        val identificationService = IdentificationService(peripheralManager, serviceScope)
         servicesByUUID[Identifiers.IDENTIFICATION_SERVICE_UUID] = identificationService
 
         // Create HRV-service object if the device has a heartratesensor
@@ -95,6 +107,7 @@ class BluetoothForegroundService : android.app.Service() {
     override fun onDestroy() {
         super.onDestroy()
         peripheralManager.close()
+        serviceScope.cancel()
     }
 
     /*
