@@ -4,3 +4,8 @@ The following open-source libraries are used in this project and are licensed un
   - Copyright (c) 2019 Martijn van Welie
   - License: MIT License
   - Source: https://github.com/weliem/blessed-android
+  
+- JTransforms
+  - Copyright (c) 2007 Piotr Wendykier
+  - License: MIT License
+  - Source: https://github.com/wendykierp/JTransforms
