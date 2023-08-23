@@ -125,6 +125,8 @@ class UltrasonicDetector {
         var arrayPos = 0
         var enabled = true
 
+        Log.i("History Evaluation", history.toList().toString())
+
         for (el in history) {
             if (countDown <= 0) {
                 arrayPos += 1
@@ -138,10 +140,12 @@ class UltrasonicDetector {
             countDown -= 1
 
             if (enabled != isPeak(mean, el)) {
-                 return false
+                Log.i("Evaluation Result", "False")
+                return false
             }
         }
 
+        Log.i("Evaluation Result", "True")
         return true
     }
 
@@ -151,7 +155,7 @@ class UltrasonicDetector {
      * */
     private fun isPeak(mean: Double, value: Double): Boolean {
         var threshold = mean / 2
-        if ( mean < 10000.0) { threshold = 10000.0 }
+        if ( threshold < 5000.0) { threshold = 5000.0 }
         return value >= threshold
     }
 }
